@@ -1,0 +1,6 @@
+Model,Expected Calibration Error (ECE),Brier Score
+XGBoost,0.0972,0.1663
+Random Forest,0.0944,0.176
+Support Vector Machine,0.0973,0.1681
+Artificial Neural Network,0.0921,0.1668
+Soft-Voting Ensemble,0.0786,0.1638

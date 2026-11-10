@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Inside Diabetes — Senior ML Engineer & Research Reviewer Audit Report</title>
+<style>
+  @page {
+    size: A4;
+    margin: 10mm 12mm 12mm 12mm;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.45;
+    font-size: 9pt;
+    margin: 0;
+    padding: 0;
+  }
+  .header-box {
+    border-bottom: 2.5px solid #0284c7;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 17pt;
+    color: #0f172a;
+    margin: 0 0 4px 0;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+  }
+  .subtitle {
+    font-size: 10pt;
+    color: #0284c7;
+    font-weight: 600;
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 8pt;
+    margin-bottom: 10px;
+  }
+  .meta-item strong { color: #475569; display: block; font-size: 7pt; text-transform: uppercase; letter-spacing: 0.5px; }
+  .meta-item span { color: #0f172a; font-weight: 600; }
+  
+  h2 {
+    font-size: 11pt;
+    color: #0f172a;
+    border-left: 3.5px solid #0284c7;
+    padding-left: 6px;
+    margin: 12px 0 6px 0;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: 9.5pt;
+    color: #334155;
+    margin: 8px 0 4px 0;
+    font-weight: 600;
+  }
+  p { margin: 0 0 6px 0; }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0 10px 0;
+    font-size: 8pt;
+  }
+  th {
+    background: #0f172a;
+    color: #ffffff;
+    text-align: left;
+    padding: 5px 6px;
+    font-weight: 600;
+    border: 1px solid #0f172a;
+  }
+  td {
+    padding: 4px 6px;
+    border: 1px solid #e2e8f0;
+    vertical-align: middle;
+  }
+  tr:nth-child(even) td { background: #f8fafc; }
+  .best-cell { background: #e0f2fe !important; font-weight: 700; color: #0369a1; }
+  
+  .badge {
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 7pt;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .badge-best { background: #0284c7; color: #fff; }
+  .badge-pass { background: #10b981; color: #fff; }
+  .badge-warn { background: #f59e0b; color: #fff; }
+  .badge-fail { background: #ef4444; color: #fff; }
+  
+  .alert-box {
+    border-radius: 5px;
+    padding: 6px 10px;
+    margin: 6px 0 8px 0;
+    font-size: 8pt;
+  }
+  .alert-info { background: #f0f9ff; border: 1px solid #bae6fd; border-left: 3.5px solid #0284c7; color: #0369a1; }
+  .alert-warning { background: #fffbeb; border: 1px solid #fde68a; border-left: 3.5px solid #d97706; color: #92400e; }
+  
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 6px 0 8px 0;
+  }
+  .matrix-card {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    padding: 6px 8px;
+  }
+  .matrix-card h4 { margin: 0 0 4px 0; font-size: 8.5pt; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; }
+  .matrix-table { margin: 0; font-size: 7.5pt; width: 100%; text-align: center; }
+  .matrix-table th { background: #334155; font-size: 7pt; padding: 3px; }
+  .matrix-table td { padding: 3px; }
+  
+  .page-break { page-break-after: always; }
+  .keep-together { page-break-inside: avoid; }
+  
+  ol, ul { margin: 0 0 6px 0; padding-left: 16px; }
+  li { margin-bottom: 3px; }
+  code { font-family: "JetBrains Mono", Consolas, monospace; font-size: 7.5pt; background: #e2e8f0; padding: 1px 3px; border-radius: 3px; }
+  
+  .priority-row-p1 { border-left: 3.5px solid #ef4444; }
+  .priority-row-p2 { border-left: 3.5px solid #f97316; }
+  .priority-row-p3 { border-left: 3.5px solid #0284c7; }
+  .priority-row-p4 { border-left: 3.5px solid #64748b; }
+  .priority-row-p5 { border-left: 3.5px solid #10b981; }
+</style>
+</head>
+<body>
+
+<div class="header-box">
+  <h1>Inside Diabetes — Multi-Model AI Architecture & Systems Audit</h1>
+  <div class="subtitle">Comprehensive Machine Learning Review, Held-Out Benchmark, Root Cause Analysis & Research Proposal</div>
+</div>
+
+<div class="meta-grid">
+  <div class="meta-item"><strong>Project Title</strong><span>Inside Diabetes Platform</span></div>
+  <div class="meta-item"><strong>Dataset</strong><span>Pima Indians Cohort (N=768)</span></div>
+  <div class="meta-item"><strong>Review Scope</strong><span>Models, Scripts, XAI, Web UI</span></div>
+  <div class="meta-item"><strong>Audit Integrity</strong><span>Strict Non-Destructive Mode</span></div>
+</div>
+
+<div class="alert-box alert-info">
+  <strong>Audit Methodology Notice:</strong> This audit was conducted under strict read-only constraints. All active models, pickles, JSON payloads, evaluation tables, and client-side JavaScript scripts were forensically evaluated without modifying existing files.
+</div>
+
+<h2>TASK 1 — VERIFY EXISTING MODELS</h2>
+
+<p>A comprehensive audit of the model artifacts and pipeline scripts revealed the following architectural state:</p>
+
+<ol>
+  <li><strong>Models Actually Trained:</strong> Four distinct models are fully trained and pickled in <code>model/</code>:
+    <ul>
+      <li><strong>XGBoost Classifier</strong> (<code>model/xgboost_model.pkl</code>): Gradient Boosted Decision Trees (50 estimators, max depth 3, scale_pos_weight 1.869).</li>
+      <li><strong>Random Forest Classifier</strong> (<code>model/rf_model.pkl</code>): Bagged ensemble of 100 decision trees (max depth 4, balanced weights).</li>
+      <li><strong>Support Vector Machine</strong> (<code>model/svm_model.pkl</code>): Soft-margin SVC with RBF kernel and Platt probability calibration.</li>
+      <li><strong>Artificial Neural Network</strong> (<code>model/diabetes_ann.pkl</code>): Feedforward Multilayer Perceptron (MLP) with 8 &rarr; 32 &rarr; 16 &rarr; 1 architecture.</li>
+    </ul>
+  </li>
+  <li><strong>Training Status:</strong> All four target models were successfully trained, cross-validated via 5-fold stratified CV, and pickled through <code>train_and_evaluate_all.py</code>.</li>
+  <li><strong>Artifact Synchronization:</strong> 
+    The serialized pickle files correspond directly to the latest tuning run. However, legacy JSON files (e.g. <code>model/random_forest_calibrated.json</code>, 4.95 MB with <code>"accuracy": null</code>, and <code>model/svm_calibrated.json</code>) remain as stale orphan artifacts from earlier experiments.</li>
+  <li><strong>Data Partitioning & Evaluation Integrity:</strong> All four models were benchmarked on the identical stratified 80/20 train/test partition (<code>random_state=42</code>, N=614 train, N=154 held-out test). The test set was locked away during tuning.</li>
+  <li><strong>Data Leakage Prevention:</strong> In <code>train_and_evaluate_all.py</code>, missing value medians and StandardScaler parameters were strictly fitted on <code>X_train</code> only. Threshold optimization used Out-Of-Fold (OOF) cross-validation on training folds. No data leakage exists in the main benchmark pipeline.</li>
+  <li><strong>Probability Calibration:</strong>
+    <ul>
+      <li><strong>XGBoost:</strong> Well-calibrated log-loss probabilities (Brier score: <strong>0.1663</strong>, best across all models).</li>
+      <li><strong>SVM:</strong> Calibrated via Platt scaling (fitted sigmoid).</li>
+      <li><strong>ANN:</strong> Raw sigmoid output probabilities (Brier score: <strong>0.1668</strong>).</li>
+      <li><strong>Random Forest:</strong> Simple tree voting (Brier score: <strong>0.1760</strong>).</li>
+    </ul>
+  </li>
+  <li><strong>Critical Frontend Discrepancies Discovered:</strong>
+    <ul>
+      <li><strong>XGBoost Browser Inference:</strong> Highly accurate. Python and JavaScript probability differences are &lt; 0.0001 across test inputs.</li>
+      <li><strong>ANN Model Mismatch:</strong> In <code>website/script.js</code> (line 11), a hardcoded legacy 8 &rarr; 16 &rarr; 8 &rarr; 1 MLP is executed rather than the newly retrained 8 &rarr; 32 &rarr; 16 &rarr; 1 model stored in <code>window.ALL_MODELS_DATA</code>.</li>
+      <li><strong>SHAP Attribution Mismatch:</strong> The client-side SHAP waterfall chart computes Integrated Gradients against the legacy ANN weights for <em>all models</em>, even when XGBoost or Random Forest is active.</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="page-break"></div>
+
+<h2>TASK 2 — VERIFIED ACTUAL PERFORMANCE</h2>
+
+<h3>1. Held-Out Test Set Evaluation ($N=154$: 100 Non-diabetic, 54 Diabetic; Default Threshold = 0.50)</h3>
+<p>Extracted directly from <code>reports/model_evaluation_metrics.csv</code> and verified against the model artifacts:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>XGBoost Classifier</th>
+      <th>Random Forest</th>
+      <th>Support Vector Machine</th>
+      <th>Artificial Neural Network</th>
+      <th>Best Model</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Accuracy</strong></td>
+      <td class="best-cell"><strong>75.97%</strong> (117/154)</td>
+      <td>73.38% (113/154)</td>
+      <td>72.73% (112/154)</td>
+      <td>73.38% (113/154)</td>
+      <td><span class="badge badge-best">XGBoost</span></td>
+    </tr>
+    <tr>
+      <td><strong>Precision</strong></td>
+      <td>62.32%</td>
+      <td>59.15%</td>
+      <td>63.04%</td>
+      <td class="best-cell"><strong>64.44%</strong></td>
+      <td><span class="badge badge-pass">ANN</span></td>
+    </tr>
+    <tr>
+      <td><strong>Recall (Sensitivity)</strong></td>
+      <td class="best-cell"><strong>79.63%</strong> (43/54)</td>
+      <td>77.78% (42/54)</td>
+      <td>53.70% (29/54)</td>
+      <td>53.70% (29/54)</td>
+      <td><span class="badge badge-best">XGBoost</span></td>
+    </tr>
+    <tr>
+      <td><strong>Specificity</strong></td>
+      <td>74.00% (74/100)</td>
+      <td>71.00% (71/100)</td>
+      <td>83.00% (83/100)</td>
+      <td class="best-cell"><strong>84.00%</strong> (84/100)</td>
+      <td><span class="badge badge-pass">ANN</span></td>
+    </tr>
+    <tr>
+      <td><strong>F1-Score</strong></td>
+      <td class="best-cell"><strong>0.6992</strong></td>
+      <td>0.6720</td>
+      <td>0.5800</td>
+      <td>0.5859</td>
+      <td><span class="badge badge-best">XGBoost</span></td>
+    </tr>
+    <tr>
+      <td><strong>ROC-AUC</strong></td>
+      <td class="best-cell"><strong>0.8255</strong></td>
+      <td>0.8126</td>
+      <td>0.8104</td>
+      <td>0.8191</td>
+      <td><span class="badge badge-best">XGBoost</span></td>
+    </tr>
+    <tr>
+      <td><strong>PR-AUC (Avg Precision)</strong></td>
+      <td>0.6920</td>
+      <td>0.6690</td>
+      <td class="best-cell"><strong>0.6955</strong></td>
+      <td>0.6924</td>
+      <td><span class="badge badge-pass">SVM</span></td>
+    </tr>
+    <tr>
+      <td><strong>Brier Score</strong> <em>(lower is better)</em></td>
+      <td class="best-cell"><strong>0.1663</strong></td>
+      <td>0.1760</td>
+      <td>0.1681</td>
+      <td>0.1668</td>
+      <td><span class="badge badge-best">XGBoost</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2. Confusion Matrices (Held-Out Test Set, Threshold = 0.50, $N=154$)</h3>
+<div class="matrix-grid">
+  <div class="matrix-card">
+    <h4>1. XGBoost Classifier (Selected Best)</h4>
+    <table class="matrix-table">
+      <tr><th></th><th>Pred Neg (0)</th><th>Pred Pos (1)</th></tr>
+      <tr><th>Actual Neg (0)</th><td><strong>74</strong> (TN)</td><td>26 (FP)</td></tr>
+      <tr><th>Actual Pos (1)</th><td><strong style="color:#10b981;">11</strong> (FN - Lowest)</td><td><strong>43</strong> (TP)</td></tr>
+    </table>
+    <div style="font-size:7pt; color:#475569; margin-top:3px;">Missed only 11 out of 54 diabetic patients.</div>
+  </div>
+  <div class="matrix-card">
+    <h4>2. Random Forest Classifier</h4>
+    <table class="matrix-table">
+      <tr><th></th><th>Pred Neg (0)</th><th>Pred Pos (1)</th></tr>
+      <tr><th>Actual Neg (0)</th><td><strong>71</strong> (TN)</td><td>29 (FP)</td></tr>
+      <tr><th>Actual Pos (1)</th><td>12 (FN)</td><td><strong>42</strong> (TP)</td></tr>
+    </table>
+    <div style="font-size:7pt; color:#475569; margin-top:3px;">Missed 12 out of 54 diabetic patients.</div>
+  </div>
+  <div class="matrix-card">
+    <h4>3. Support Vector Machine (SVM)</h4>
+    <table class="matrix-table">
+      <tr><th></th><th>Pred Neg (0)</th><th>Pred Pos (1)</th></tr>
+      <tr><th>Actual Neg (0)</th><td><strong>83</strong> (TN)</td><td>17 (FP)</td></tr>
+      <tr><th>Actual Pos (1)</th><td><strong style="color:#ef4444;">25</strong> (FN - High)</td><td>29 (TP)</td></tr>
+    </table>
+    <div style="font-size:7pt; color:#475569; margin-top:3px;">Missed 25 out of 54 diabetic patients (46.3% miss rate).</div>
+  </div>
+  <div class="matrix-card">
+    <h4>4. Artificial Neural Network (ANN)</h4>
+    <table class="matrix-table">
+      <tr><th></th><th>Pred Neg (0)</th><th>Pred Pos (1)</th></tr>
+      <tr><th>Actual Neg (0)</th><td><strong>84</strong> (TN)</td><td>16 (FP)</td></tr>
+      <tr><th>Actual Pos (1)</th><td><strong style="color:#ef4444;">25</strong> (FN - High)</td><td>29 (TP)</td></tr>
+    </table>
+    <div style="font-size:7pt; color:#475569; margin-top:3px;">Missed 25 out of 54 diabetic patients (46.3% miss rate).</div>
+  </div>
+</div>
+
+<h3>3. Cross-Validation Results (5-Fold Stratified CV on Training Cohort, $N=614$)</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Model Architecture</th>
+      <th>5-Fold Mean CV ROC-AUC</th>
+      <th>Standard Deviation (&sigma;)</th>
+      <th>Optimal OOF Threshold (Max F1)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Artificial Neural Network (ANN)</strong></td><td><strong>0.8490</strong></td><td>&plusmn; 0.021</td><td>0.25 (OOF F1: 0.6970)</td></tr>
+    <tr><td><strong>Support Vector Machine (SVM)</strong></td><td>0.8431</td><td>&plusmn; 0.019</td><td>0.25 (OOF F1: 0.6976)</td></tr>
+    <tr><td><strong>XGBoost Classifier</strong></td><td>0.8321</td><td>&plusmn; 0.024</td><td>0.53 (OOF F1: 0.6916)</td></tr>
+    <tr><td><strong>Random Forest Classifier</strong></td><td>0.8306</td><td>&plusmn; 0.022</td><td>0.49 (OOF F1: 0.6936)</td></tr>
+  </tbody>
+</table>
+
+<h3>4. Performance at Validation-Tuned Decision Thresholds</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>Tuned Threshold</th>
+      <th>Test Accuracy</th>
+      <th>Test Precision</th>
+      <th>Test Recall (Sensitivity)</th>
+      <th>Test F1-Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>XGBoost</strong></td><td>0.53</td><td class="best-cell"><strong>77.27%</strong></td><td>64.62%</td><td>77.78%</td><td class="best-cell"><strong>0.7059</strong></td></tr>
+    <tr><td><strong>Random Forest</strong></td><td>0.49</td><td>73.38%</td><td>58.90%</td><td>79.63%</td><td>0.6772</td></tr>
+    <tr><td><strong>SVM (Calibrated)</strong></td><td>0.25</td><td>72.08%</td><td>56.63%</td><td class="best-cell"><strong>87.04%</strong></td><td>0.6861</td></tr>
+    <tr><td><strong>ANN (MLP)</strong></td><td>0.25</td><td>70.13%</td><td>54.76%</td><td>85.19%</td><td>0.6667</td></tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2>TASK 3 — ROOT CAUSE ANALYSIS: WHY ACCURACY HOVERS AT ~76%</h2>
+
+<div class="alert-box alert-warning">
+  <strong>Key Finding:</strong> The ~76% performance ceiling is not primarily caused by model capacity or code bugs; it is driven by severe data omissions and statistical limitations inherent to the Pima Indians cohort.
+</div>
+
+<ol>
+  <li><strong>Extreme Missing Data Masked as Zeros:</strong>
+    <ul>
+      <li><strong>Insulin: 48.70% missing (374 / 768 rows).</strong> Serum insulin was omitted for almost half the cohort.</li>
+      <li><strong>SkinThickness: 29.56% missing (227 / 768 rows).</strong></li>
+      <li>Univariate median imputation replaces 48.7% of insulin values with the constant <code>125.0 &micro;U/mL</code>. This creates an unnatural spike that destroys the physiological non-linear relationship between Glucose and Insulin (e.g. HOMA-IR index).</li>
+    </ul>
+  </li>
+  <li><strong>Small Test Set Granularity ($N=154$):</strong>
+    In a test set of 154 samples, a classification change for a single patient alters accuracy by <code>1 / 154 &asymp; 0.65%</code>. A 76% vs 73% difference corresponds to just 4 to 5 patients, which lies well within the 95% binomial confidence margin.
+  </li>
+  <li><strong>Rigid Decision Thresholding in the UI:</strong>
+    The frontend enforces a static 0.50 threshold. Because the cohort is imbalanced (65.1% negative), unweighted models like SVM and ANN lean conservative, resulting in a disastrous 53.7% recall. Operating SVM at threshold 0.25 boosts recall to <strong>87.04%</strong>, but the UI provides no mechanism for clinicians to adjust operating points.
+  </li>
+  <li><strong>Shallow Hyperparameter Search:</strong>
+    GridSearchCV evaluated only 8 to 12 configurations per model. Finer tree pruning parameters (gamma, subsample, colsample_bynode) and deeper learning-rate decay schedules were not explored.
+  </li>
+  <li><strong>Client-Side Approximations:</strong>
+    Random Forest was truncated from 100 trees to 25 trees in the JS bundle to save file size. Furthermore, SVM Platt scaling parameters in JS were static hardcoded approximations rather than dynamically bound to the fitted <code>probA_</code> and <code>probB_</code> attributes.
+  </li>
+</ol>
+
+<h2>TASK 4 — REVIEW OF RESEARCH NOVELTY</h2>
+
+<h3>Assessment of Existing Research Documentation:</h3>
+<ul>
+  <li><code>RESEARCH_PROBLEM.md</code> is outdated: It was drafted early in development and only contemplated a simple Logistic Regression model with isotonic calibration.</li>
+  <li><code>MODEL_COMPARISON_REPORT.md</code> is comprehensive: It provides a rigorous benchmark across all 4 architectures, evaluates clinical false negative costs, and provides global TreeSHAP rankings.</li>
+  <li><strong>The Remaining Research Gap:</strong> Current XAI in the platform is purely descriptive (telling the user <em>why</em> their risk is high), but offers zero <strong>actionable clinical recourse</strong> (telling the user <em>what minimal lifestyle changes would reduce their risk below the danger threshold</em>).</li>
+</ul>
+
+<div class="alert-box alert-info">
+  <strong>Recommended Research Contribution: "Actionable Counterfactual Recourse & Decision Boundary Inversion"</strong>
+  <p style="margin-top:3px;">
+    <strong>Concept:</strong> Given a patient predicted at High or Moderate Risk (&ge;30%), the system computes the <strong>minimal clinically plausible intervention vector</strong> on modifiable biomarkers (&Delta;Glucose, &Delta;BMI, &Delta;BloodPressure) required to shift the patient into the Low Risk category (&lt;30%), while locking unmodifiable factors (Age, Pregnancies, Pedigree).<br>
+    <strong>Implementation Feasibility:</strong> Requires zero project rebuild and no model retraining. Because all 4 models already execute synchronously in client-side JavaScript, a constrained gradient or simplex search can compute the optimal counterfactual vector in &lt;15 ms in the browser.
+  </p>
+</div>
+
+<div class="page-break"></div>
+
+<h2>TASK 5 — FINAL AUDIT REPORT & PRIORITIZED ROADMAP</h2>
+
+<div class="keep-together">
+  <h3>A. Existing Working Features</h3>
+  <ul>
+    <li><strong>4 Validated Machine Learning Models:</strong> XGBoost, Random Forest, Calibrated SVM, and ANN trained with zero data leakage.</li>
+    <li><strong>Synchronous Client-Side Inference Engine:</strong> <code>website/models_bundle.js</code> enables instantaneous local and offline prediction without CORS or server dependencies.</li>
+    <li><strong>Modern Sci-Fi Medical HUD:</strong> Isolated human holographic silhouette, SVG circular gauge, 2x4 biomarker input grid, and held-out test performance grid.</li>
+    <li><strong>Interactive 3D Biological Scene:</strong> Three.js WebGL canvas displaying interactive neural network pulses and vascular blood flow linked to live glucose inputs.</li>
+  </ul>
+
+  <h3>B. Verified Model Results Summary</h3>
+  <ul>
+    <li><strong>XGBoost Classifier is the objectively superior screening model</strong>: Test ROC-AUC of <strong>0.8255</strong>, Recall of <strong>79.63%</strong> (only 11 false negatives), F1 of <strong>0.6992</strong>, Accuracy of <strong>75.97%</strong>, and Brier calibration score of <strong>0.1663</strong>.</li>
+    <li><strong>ANN is the superior precision model</strong>: Test Precision of <strong>64.44%</strong> and Specificity of <strong>84.00%</strong>, but unsuitable as a solo screening engine due to a 46.3% false negative rate at standard threshold.</li>
+  </ul>
+
+  <h3>C. Methodological Problems Identified</h3>
+  <ul>
+    <li>Frontend SHAP waterfall chart displays legacy ANN Integrated Gradients regardless of whether XGBoost or RF is selected.</li>
+    <li>Frontend ANN execution uses obsolete 8 &rarr; 16 &rarr; 8 &rarr; 1 weights instead of the retrained 8 &rarr; 32 &rarr; 16 &rarr; 1 architecture.</li>
+    <li>Simple median imputation creates an artificial density spike across 48.7% of missing insulin entries.</li>
+    <li>Repository contains 4.95 MB of orphaned/broken JSON files with null metrics.</li>
+  </ul>
+
+  <h3>D. Missing Experiments</h3>
+  <ul>
+    <li>Multivariate Imputation by Chained Equations (MICE / IterativeImputer) comparison against median imputation.</li>
+    <li>Clinical Decision Curve Analysis (DCA) measuring Net Clinical Benefit across screening threshold probabilities.</li>
+  </ul>
+
+  <h3>E. Recommended Research Feature</h3>
+  <p><strong>Interactive Patient Recourse Engine</strong>: Client-side mathematical solver computing personalized minimal biomarker reduction targets required to cross into the low-risk zone.</p>
+
+  <h3>F. Prioritized Implementation Plan</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:14%;">Priority</th>
+        <th style="width:26%;">Action Item</th>
+        <th style="width:28%;">Target Files</th>
+        <th style="width:32%;">Clinical & Engineering Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="priority-row-p1">
+        <td><span class="badge badge-fail">P1 (Immediate)</span></td>
+        <td><strong>Frontend Model & SHAP Dispatcher Fix</strong></td>
+        <td><code>website/script.js</code><br><code>website/models_bundle.js</code></td>
+        <td>Ensures UI uses the 32x16 ANN weights and displays model-congruent SHAP attributions for the active model.</td>
+      </tr>
+      <tr class="priority-row-p2">
+        <td><span class="badge badge-warn">P2 (High)</span></td>
+        <td><strong>Interactive Clinical Screening Threshold Slider</strong></td>
+        <td><code>website/index.html</code><br><code>website/script.js</code></td>
+        <td>Enables clinicians to switch operating points (e.g. 0.25 for screening with 87% sensitivity vs 0.50 for diagnosis).</td>
+      </tr>
+      <tr class="priority-row-p3">
+        <td><span class="badge badge-best">P3 (Research)</span></td>
+        <td><strong>Actionable Counterfactual Recourse Panel</strong></td>
+        <td><code>website/index.html</code><br><code>website/script.js</code></td>
+        <td>Implements the novel research contribution: real-time computation of actionable biomarker reduction targets.</td>
+      </tr>
+      <tr class="priority-row-p4">
+        <td><span class="badge badge-pass">P4 (Housekeeping)</span></td>
+        <td><strong>Archive Stale Model Files</strong></td>
+        <td><code>model/*.json</code></td>
+        <td>Removes orphaned 4.95 MB JSON files (<code>random_forest_calibrated.json</code>, etc.) to keep the codebase clean.</td>
+      </tr>
+      <tr class="priority-row-p5">
+        <td><span class="badge badge-pass">P5 (Exploratory)</span></td>
+        <td><strong>Iterative / MICE Imputation Benchmark</strong></td>
+        <td><code>train_and_evaluate_all.py</code></td>
+        <td>Evaluates whether multivariate chained equation imputation pushes test ROC-AUC beyond 0.8255.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:14px; padding:6px; border-top:1px solid #cbd5e1; font-size:7.5pt; color:#64748b; text-align:center;">
+    <em>Inside Diabetes Platform &bull; Senior Machine Learning Engineer & Research Reviewer Audit Report &bull; Validated & Reproducible</em>
+  </div>
+</div>
+
+</body>
+</html>

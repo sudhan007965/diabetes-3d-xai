@@ -1,0 +1,11 @@
+Metric Type,Quartile,Sample Count (N),Correct Count,Accuracy,95% CI Lower (Wilson),95% CI Upper (Wilson),Mean Metric Value,Brier Score
+4-Model Soft-Voting Ensemble (Full Cohort),Full Test Cohort (N=154),154,112,0.7273,0.652,0.7914,0.0665,0.1638
+Naive Majority-Class Baseline (Predict Negative),Dataset Prevalence / Test Baseline,154,100,0.6494,0.5712,0.7202,0.651,0.3506
+Epistemic Uncertainty (Model Disagreement Std),Q1 (Most Certain),38,32,0.8421,0.6958,0.9256,0.0309,0.1121
+Epistemic Uncertainty (Model Disagreement Std),Q2 (Moderately Certain),39,31,0.7949,0.6447,0.8922,0.0511,0.1577
+Epistemic Uncertainty (Model Disagreement Std),Q3 (Moderately Uncertain),38,24,0.6316,0.4728,0.7662,0.072,0.1868
+Epistemic Uncertainty (Model Disagreement Std),Q4 (Most Uncertain),39,25,0.641,0.4842,0.7726,0.1112,0.1978
+Baseline Confidence (|p_ens - 0.5|),Q1 (Most Certain),38,37,0.9737,0.8651,0.9953,0.4198,0.0294
+Baseline Confidence (|p_ens - 0.5|),Q2 (Moderately Certain),39,30,0.7692,0.6166,0.8735,0.3244,0.1754
+Baseline Confidence (|p_ens - 0.5|),Q3 (Moderately Uncertain),38,28,0.7368,0.5799,0.8503,0.1954,0.1914
+Baseline Confidence (|p_ens - 0.5|),Q4 (Most Uncertain),39,17,0.4359,0.293,0.5902,0.0623,0.2562

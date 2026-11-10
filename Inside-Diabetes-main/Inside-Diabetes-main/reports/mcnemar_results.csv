@@ -1,0 +1,5 @@
+Comparison,XGBoost Correct Count,Comparator Correct Count,"XGB Correct, Comp Incorrect (b)","XGB Incorrect, Comp Correct (c)",Net Difference (b - c),Discordant Pairs (b+c),Statistical Test,McNemar Chi-Square (Corrected),p-value,Statistically Significant (p < 0.05)
+XGBoost vs. Random Forest,117,113,6,2,4,8,Exact Binomial,,0.2891,No
+XGBoost vs. Support Vector Machine,117,112,16,11,5,27,Chi-Square (cc),0.5926,0.4414,No
+XGBoost vs. Artificial Neural Network,117,113,16,12,4,28,Chi-Square (cc),0.3214,0.5708,No
+XGBoost vs. Soft-Voting Ensemble,117,112,10,5,5,15,Exact Binomial,,0.3018,No
